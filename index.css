@@ -1,0 +1,99 @@
+* {
+	margin: 0;
+	padding: 0;
+	list-style: none;
+	-webkit-box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	box-sizing: border-box;
+}
+
+ul:hover > p {
+	background-color: rgb(50, 50, 50);
+	color: rgb(230, 230, 230); 
+	transition: 0.25s;
+}
+
+ul, li {
+	padding-left: 20px;
+}
+
+#doc_tree {
+	background-color: rgb(230, 230, 230);
+	border: 2px solid rgb(200, 200, 200);
+	padding: 20px 20px 20px 10px;
+	width: 100%;
+}
+
+.file,
+.folder {
+	font-size: 20px;
+	border-radius: 6px;
+	cursor: pointer;
+	margin: 7px;
+	color: rgb(200, 200, 200);
+}
+
+.file > p,
+.folder > p {
+	padding: 10px;
+}
+
+.file {
+
+}
+.folder {
+
+}
+
+.file > p {
+	background-color: rgb(0, 140, 140);
+	border-radius: 6px;
+}
+
+.folder > p{
+	background-color: rgb(200, 80, 100);
+	border-radius: 6px;
+	font-weight: bold;
+}
+
+.wrapper {
+	width: 80%;
+	padding-top: 30px;
+	display: -webkit-flex;
+	display: -moz-flex;
+	display: -ms-flex;
+	display: -o-flex;
+	display: flex;
+	flex-direction: column;
+	margin: 30px;
+}
+#enter_path {
+	width: 50%;
+	margin-bottom: 7px;
+	font-size: 20px;
+	padding: 5px 10px 5px;
+	outline: none;
+	border: 2px solid grey;
+	border-radius: 6px;
+}
+#enter_path_btn {
+	margin-bottom: 20px;
+	padding: 5px;
+	font-size: 18px;
+	width: 20%;
+	outline: none;
+	border: none;
+	background-color: rgb(50, 50, 50);
+	color: rgb(230, 230, 230);
+	border-radius: 6px;
+	cursor: pointer;
+}
+
+#enter_path_btn:hover {
+	background-color: rgb(80, 80, 80);
+}
+
+#enter_path_btn:active {
+	background-color: rgb(200, 80, 100);
+	color: rgb(200, 200, 200);
+}
