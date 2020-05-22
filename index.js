@@ -71,6 +71,7 @@ class FileWorkError extends Error{
 	}
 }
 
+//Основная структура представления данных в виде дерева
 class Tree {
 	constructor(root) {
 		this.root = root;
@@ -79,14 +80,17 @@ class Tree {
 
 	//Метод добавления файла по указанному пути
 	addFileWithPath(path) {
-
+		
+		//Проверка на несовпадение имени создаваемого файла с уже существующими
 		function isUnique(folder, name) {
 			try{
 				const coincidences = folder.childs.filter(value => name === value.name);
 				if(coincidences.length > 0)
 					throw new FileWorkError('File with the same name already exists');
 				else 
-					return true;			
+					return true;
+
+			//при возбуждении ошибки функция вернет undefined -> аналогично false	
 			} catch(e) {
 				if(e.name === 'FileWorkError')
 					alert(e.message);
@@ -96,16 +100,21 @@ class Tree {
 
 		}
 
+		//Массив будет соответствовать пути без имени файла.
+		//т.к. реализована функция поиска нужной директории
 		const pathArray = [...path.split('/')];
 		const nameOfFile = pathArray.pop();
+
 		const searchedFolder = this.findFolder(this.root, pathArray);
 		if(searchedFolder && isUnique(searchedFolder, nameOfFile)) {
 			searchedFolder.addChild(nameOfFile, TYPE_FILE);
 		}
 	}
 
+	//Метод закрытия папки по указанному пути
 	hideFolder(path) {
 
+		//Помимо закрытия самой папки рекурсивное закрытие всех внутренних
 		function closeAllFoldersInThisFolder(folder) {
 			for(let child of folder.childs) {
 				if(child instanceof Folder) {
@@ -164,11 +173,12 @@ class Tree {
 
 //Node и File аналогичны по структуре, однако по семантике папка наврядли должна наследоваться
 //от файла. Поэтому File и Folder по своей сути являются узлами дерева, от которого и идет наследование
-
 class Node {
 	constructor(name, path) {
 		this.name = name;
 		this.path = path;
+
+		//Поле необходимо для отрисовки
 		this.isHidden = true;
 	}
 }
@@ -215,8 +225,10 @@ class Folder extends Node {
 function createTreeFromObjectStructure(structure) {
 
 	function addChildInTree(item, path) {
+
 		if(item.type === TYPE_FILE) 
 			return new File(item.name, path);
+
 		else if(item.type === TYPE_FOLDER){
 			const allChilds = [];
 			if(item.childs)
@@ -228,7 +240,8 @@ function createTreeFromObjectStructure(structure) {
 	return new Tree(addChildInTree(structure.root, 'root'));	
 }
 
-
+//Отрисовка в консоли. Аналогична последующему рисованию.
+//Была промежуточной для тестов, используй как хочешь
 function printTree(tree) {
 
 	function printChild(child) {
@@ -244,10 +257,10 @@ function printTree(tree) {
 			}
 		}
 	}
-
 	printChild(tree.root);
 }
 
+//Сама отрисовка
 function drawTree(tree) {
 
 	const testNode = document.getElementById('doc_tree');
@@ -270,8 +283,8 @@ function drawTree(tree) {
 	testNode.innerHTML = drawChild(tree.root);
 }
 
+//Стартовая инициализация
 const tree = createTreeFromObjectStructure(structure);
-printTree(tree);
 drawTree(tree);
 
 
@@ -283,12 +296,18 @@ const enterPathButton = document.getElementById('enter_path_btn');
 docTree.addEventListener(
 	'click', 
 	(event) => {
+
+		//Выбирается ближайший родитель объекта (для случая, чтобы внутренний p не играл роль
+		//и воспринимался как свой родитель)
 		const target = event.target.closest('ul');
 		if(target) {
 			const path = target.dataset.path;
 			const folderTarget = tree.findFolder(tree.root, path.split('/'));
+
 			folderTarget.getOpened() ? tree.hideFolder(path) : tree.openFolder(path);
+
 			enterPath.value = path;
+
 			drawTree(tree);
 		}
 	}
